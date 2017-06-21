@@ -8,10 +8,21 @@ define puppet_device::conf::device (
 ) {
   include puppet_device::conf
   if ($ensure == 'present') {
-    concat::fragment{ "puppet_device_conf [${title}]":
-      target  => $puppet_device::conf::device_conf,
-      content => "[${title}]\ntype ${type}\nurl ${url}\n\n",
-      order   => '99',
+    ini_setting { "puppet_device_conf [${title}] type":
+      ensure            => present,
+      key_val_separator => ' ',
+      section           => $title,
+      setting           => 'type',
+      value             => $type,
+      path              => $puppet_device::conf::device_conf,
+    }
+    ini_setting { "puppet_device_conf [${title}] type":
+      ensure            => present,
+      key_val_separator => ' ',
+      section           => $title,
+      setting           => 'url',
+      value             => $url,
+      path              => $puppet_device::conf::device_conf,
     }
   }
 }

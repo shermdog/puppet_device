@@ -9,14 +9,12 @@ class puppet_device::conf {
   }
 
   $device_conf = $::puppet_deviceconfig
-
-  concat { $device_conf:
-    backup => false,
-  }
-
-  concat::fragment{ 'puppet_device_conf_comment':
-    target  => $device_conf,
-    content => "# This file is managed by the puppet_device module.\n\n",
-    order   => '01',
+  ini_setting { "puppet_device_conf [comment]":
+    ensure            => present,
+    key_val_separator => ' ',
+    section           => '',
+    setting           => 'comment',
+    value             => 'This file is managed by the puppet_device module',
+    path              => $puppet_device::conf::device_conf,
   }
 }
